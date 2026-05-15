@@ -15,10 +15,18 @@ news_analysis_ollama.py
 - Applying name filter if user provided person name in news(case-insensitive)
 
 
-issues found:
+issues and limitation:
 - Model tend to hallucinate or fall back to their training data when summarize news that has information
   newer than its data. which can result in inaccurrate sentiment analysis 
 - Entity or person in news not properly recognized
 
+**Using this project**
 
+Prerequisites
+- Python 3.9+
+- pip install -r requirement.txt
+- Ollama installed and running locally
+- Qwen2.5:3b model pulled(command: ollama pull qwen2.5:3b)
 
+run app
+- streamlit run app.py
