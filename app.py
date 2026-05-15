@@ -6,7 +6,6 @@ import plotly.graph_objects as go
 from new_scraper  import get_news
 from news_analysis_ollama import analyze
 
-# ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="News Sentiment Tracker",
     layout="wide",
@@ -26,7 +25,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.title("News Sentiment Tracker")
     st.caption("Named Entity Recognition + Sentiment Analysis")
@@ -57,10 +55,8 @@ with st.sidebar:
             st.session_state.history = []
             st.rerun()
 
-# ── Main panel ────────────────────────────────────────────────────────────────
 st.title("News Entity & Sentiment Tracker")
 
-# ── Analysis trigger ──────────────────────────────────────────────────────────
 if analyze_btn:
     if not url_input.strip():
         st.warning("Please enter a URL in the sidebar first.")
@@ -93,15 +89,13 @@ if analyze_btn:
 
             status.update(label="Done!", state="complete")
 
-# ── Display results ───────────────────────────────────────────────────────────
 if not st.session_state.history:
     st.info("Enter a news URL in the sidebar and click **Analyze Article** to get started.")
     st.stop()
 
-# Latest result
+
 latest = st.session_state.history[-1]
 
-# ── Article info ──────────────────────────────────────────────────────────────
 st.subheader(f"📄 {latest['_title']}")
 st.caption(f"Published: {latest['_date']}  •  [Open article]({latest['_url']})")
 
@@ -111,7 +105,6 @@ if latest.get("summary"):
 
 st.divider()
 
-# ── KPI row ───────────────────────────────────────────────────────────────────
 persons = latest.get("persons", [])
 sentiments = [p["sentiment"] for p in persons]
 
@@ -123,7 +116,6 @@ col4.metric("Neutral",         sentiments.count("Neutral"))
 
 st.divider()
 
-# ── If we have persons ────────────────────────────────────────────────────────
 if persons:
     df = pd.DataFrame(persons)
 
@@ -148,7 +140,7 @@ if persons:
         )
         st.plotly_chart(pie, use_container_width=True)
 
-    # Bar chart – sentiment per person
+    # Bar chart: sentiment per person
     with right:
         st.subheader("Persons & sentiment")
         sentiment_order = {"Positive": 1, "Negative": -1, "Neutral": 0}
@@ -195,7 +187,7 @@ if persons:
 else:
     st.warning("No public persons were detected in this article.")
 
-# ── Cross-article trend (if multiple articles analyzed) ───────────────────────
+# ── Cross-article trend (if multiple articles analyzed in same session) ───────────────────────
 if len(st.session_state.history) > 1:
     st.divider()
     st.subheader("📊 Cross-article trends")
